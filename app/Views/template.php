@@ -26,6 +26,12 @@
                 <li class="nav-item">
                     <a class="nav-link <?= service('uri')->getPath() == 'contact' ? 'active' : '' ?>" href="<?= site_url('contact') ?>">Contact</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= service('uri')->getPath() == 'login' ? 'active' : '' ?>" href="<?= site_url('/login') ?>">Login</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link <?= service('uri')->getPath() == 'register' ? 'active' : '' ?>" href="<?= site_url('/register') ?>">Register</a>
+                </li>
             </ul>
         </div>
     </div>
