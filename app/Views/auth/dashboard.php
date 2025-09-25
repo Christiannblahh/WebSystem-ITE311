@@ -48,7 +48,10 @@
     </style>
 </head>
 
+    <?= $this->include('templates/header') ?>
+
 <body>
+
     <div class="dash-wrapper">
         <div class="dash-card">
             <div class="dash-title">Welcome, <?= esc($name) ?>!</div>
