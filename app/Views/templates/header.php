@@ -1,9 +1,11 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <title><?= esc($title ?? 'MyApp') ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark px-3">
         <a class="navbar-brand" href="<?= site_url('/dashboard') ?>">MyApp</a>
@@ -12,26 +14,35 @@
             <span class="navbar-toggler-icon"></span>
         </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('/dashboard') ?>">Dashboard</a>
-                    </li>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= site_url('/dashboard') ?>">Dashboard</a>
+                </li>
 
-                    <?php if (session()->get('role') === 'student'): ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="<?= site_url('/student/profile') ?>">My Profile</a>                  
-                        </li>
-                         <li class="nav-item">
+                <?php if (session()->get('role') === 'student'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/student/profile') ?>">My Profile</a>
+                    </li>
+                    <li class="nav-item">
                         <a class="nav-link" href="<?= site_url('/student/profile') ?>">My Grades</a>
-                        </li>
-                    <?php endif; ?>
-
-                    <li class="nav-item">
-                        <a class="nav-link" href="<?= site_url('/logout') ?>">Logout</a>
                     </li>
-                </ul>
-            </div>
+                <?php endif; ?>
+
+                <?php if (session()->get('role') === 'instructor'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/instructor/profile') ?>">My Class</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/instructor/profile') ?>">Students</a>
+                    </li>
+                <?php endif; ?>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?= site_url('/logout') ?>">Logout</a>
+                </li>
+            </ul>
+        </div>
         </div>
     </nav>
 
