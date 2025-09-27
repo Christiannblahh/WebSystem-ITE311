@@ -17,7 +17,7 @@
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('/dashboard') ?>">Dashboard</a>
+                    <a class="nav-link text-primary" href="<?= site_url('/dashboard') ?>">Dashboard</a>
                 </li>
 
                 <?php if (session()->get('role') === 'student'): ?>
@@ -48,7 +48,7 @@
                 <?php endif; ?>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="<?= site_url('/logout') ?>">Logout</a>
+                    <a class="nav-link text-danger" href="<?= site_url('/logout') ?>">Logout</a>
                 </li>
             </ul>
         </div>
