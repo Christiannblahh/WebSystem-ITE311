@@ -29,7 +29,7 @@
                     </li>
                 <?php endif; ?>
 
-                <?php if (session()->get('role') === 'instructor'): ?>
+                <?php if (session()->get('role') === 'teacher'): ?>
                     <li class="nav-item">
                         <a class="nav-link" href="<?= site_url('/dashboard') ?>">My Class</a>
                     </li>
