@@ -65,41 +65,57 @@ class Auth extends Controller
 
     // Login
     public function login()
-    {
-        helper(['form']);
-        $session = session();
-        $userModel = new UserModel();
+{
+    helper(['form']);
+    $session = session();
+    $userModel = new UserModel();
 
-        if (strtolower($this->request->getMethod()) === 'post') {
-            $rules = [
-                'email' => 'required|valid_email',
-                'password' => 'required|min_length[6]',
-            ];
+    if (strtolower($this->request->getMethod()) === 'post') {
+        $rules = [
+            'email'    => 'required|valid_email',
+            'password' => 'required|min_length[6]',
+        ];
 
-            if (!$this->validate($rules)) {
-                return view('auth/login', ['validation' => $this->validator]);
-            }
-
-            $user = $userModel->where('email', $this->request->getPost('email'))->first();
-
-            if ($user && password_verify($this->request->getPost('password'), $user['password'])) {
-                $session->set([
-                    'userID' => $user['id'],
-                    'name' => $user['name'],
-                    'email' => $user['email'],
-                    'role' => $user['role'],
-                    'isLoggedIn' => true,
-                ]);
-
-                $session->setFlashdata('success', 'Welcome, ' . $user['name']);
-                return redirect()->to(site_url('/dashboard'));
-            } else {
-                $session->setFlashdata('error', 'Invalid email or password.');
-            }
+        if (!$this->validate($rules)) {
+            return view('auth/login', ['validation' => $this->validator]);
         }
 
-        return view('auth/login');
+        $email = $this->request->getPost('email');
+        $password = $this->request->getPost('password');
+
+        $user = $userModel->where('email', $email)->first();
+
+        if ($user && password_verify($password, $user['password'])) {
+            // store user session data
+            $session->set([
+                'userID'     => $user['id'],
+                'name'       => $user['name'],
+                'email'      => $user['email'],
+                'role'       => $user['role'],
+                'isLoggedIn' => true,
+            ]);
+
+            $session->setFlashdata('success', 'Welcome, ' . $user['name']);
+
+            // role-based redirect
+            switch ($user['role']) {
+                case 'student':
+                    return redirect()->to(site_url('announcements'));
+                case 'teacher':
+                    return redirect()->to(site_url('teacher/dashboard'));
+                case 'admin':
+                    return redirect()->to(site_url('admin/dashboard'));
+                default:
+                    return redirect()->to(site_url('/dashboard')); // fallback
+            }
+        } else {
+            $session->setFlashdata('error', 'Invalid email or password.');
+        }
     }
+
+    return view('auth/login');
+}
+
 
     // Logout
     public function logout()
