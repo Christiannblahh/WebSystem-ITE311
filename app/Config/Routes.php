@@ -21,7 +21,7 @@ $routes->get('/logout', 'Auth::logout');
 
 $routes->get('/dashboard', 'Auth::dashboard');
 
-$routes->get('student/dashboard', 'Student::dashboard');
+$routes->get('announcements', 'Announcement::index');
 
 $routes->get('teacher/dashboard', 'Teacher::dashboard');
 

@@ -95,8 +95,6 @@ class Auth extends Controller
                 'isLoggedIn' => true,
             ]);
 
-            $session->setFlashdata('success', 'Welcome, ' . $user['name']);
-
             // role-based redirect
             switch ($user['role']) {
                 case 'student':
