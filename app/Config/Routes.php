@@ -20,6 +20,19 @@ $routes->post('/login', 'Auth::login');
 $routes->get('/logout', 'Auth::logout');
 
 $routes->get('/dashboard', 'Auth::dashboard');
+$routes->get('student/dashboard', 'Auth::studentDashboard');
+$routes->get('teacher/dashboard', 'Auth::teacherDashboard');
+$routes->get('admin/dashboard', 'Auth::adminDashboard');
+$routes->get('/admin/courses', 'Admin::coursesList');
+$routes->get('/student/courses', 'Auth::studentCourses');
+
+$routes->get('/admin/course/(:num)/upload', 'Materials::upload/$1');
+$routes->post('/admin/course/(:num)/upload', 'Materials::upload/$1');
+$routes->get('/admin/course/(:num)/materials', 'Materials::list/$1');
+$routes->get('/materials/delete/(:num)', 'Materials::delete/$1');
+$routes->get('/materials/download/(:num)', 'Materials::download/$1');
+
+$routes->post('/course/enroll', 'Course::enroll');
 
 $routes->get('announcements', 'Announcement::index');
 

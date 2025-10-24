@@ -130,9 +130,96 @@ class Auth extends Controller
             return redirect()->to(site_url('/login'));
         }
 
+        $role = $session->get('role');
+        if ($role === 'student') {
+            return redirect()->to(site_url('student/dashboard'));
+        } elseif ($role === 'teacher') {
+            return redirect()->to(site_url('teacher/dashboard'));
+        } elseif ($role === 'admin') {
+            return redirect()->to(site_url('admin/dashboard'));
+        } else {
+            return redirect()->to(site_url('/logout'));
+        }
+    }
+
+    // Student dashboard logic (moved from dashboard())
+    public function studentDashboard()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn')) {
+            return redirect()->to(site_url('/login'));
+        }
+        $user_id = $session->get('userID');
+        $courseModel = new \App\Models\CourseModel();
+        $courses = $courseModel->findAll();
+        $enrollmentModel = new \App\Models\EnrollmentModel();
+        $enrollments = $enrollmentModel->select('courses.id, courses.title, courses.description')->join('courses', 'courses.id = enrollments.course_id')->where('enrollments.user_id', $user_id)->findAll();
+        $enrolledIds = array_column($enrollments, 'id');
+        $available = array_filter($courses, function($c) use ($enrolledIds) { return !in_array($c['id'], $enrolledIds); });
         return view('auth/dashboard', [
             'name' => $session->get('name'),
             'role' => $session->get('role'),
+            'enrollments' => $enrollments,
+            'courses' => $available,
+        ]);
+    }
+
+    // Stub for teacher dashboard
+    public function teacherDashboard()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn')) {
+            return redirect()->to(site_url('/login'));
+        }
+        return view('auth/teacher_dashboard', [
+            'name' => $session->get('name'),
+            'role' => $session->get('role'),
+        ]);
+    }
+
+    // Stub for admin dashboard
+    public function adminDashboard()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn')) {
+            return redirect()->to(site_url('/login'));
+        }
+        $courseModel = new \App\Models\CourseModel();
+        $courses = $courseModel->findAll();
+        return view('auth/admin_dashboard', [
+            'name' => $session->get('name'),
+            'role' => $session->get('role'),
+            'courses' => $courses,
+        ]);
+    }
+
+    // Student courses - show enrolled courses with materials
+    public function studentCourses()
+    {
+        $session = session();
+        if (!$session->get('isLoggedIn') || $session->get('role') !== 'student') {
+            return redirect()->to(site_url('/login'));
+        }
+        
+        $user_id = $session->get('userID');
+        $enrollmentModel = new \App\Models\EnrollmentModel();
+        $materialModel = new \App\Models\MaterialModel();
+        
+        // Get enrolled courses with materials
+        $enrolledCourses = $enrollmentModel->select('courses.*')
+            ->join('courses', 'courses.id = enrollments.course_id')
+            ->where('enrollments.user_id', $user_id)
+            ->findAll();
+        
+        // Get materials for each course
+        foreach ($enrolledCourses as &$course) {
+            $course['materials'] = $materialModel->getMaterialsByCourse($course['id']);
+        }
+        
+        return view('auth/student_courses', [
+            'name' => $session->get('name'),
+            'role' => $session->get('role'),
+            'courses' => $enrolledCourses,
         ]);
     }
 }

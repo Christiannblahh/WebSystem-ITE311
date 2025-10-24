@@ -2,12 +2,21 @@
 
 namespace App\Controllers;
 
-use App\Controllers\BaseController;
+use App\Models\CourseModel;
+use CodeIgniter\Controller;
 
-class Admin extends BaseController
+class Admin extends Controller
 {
-    public function dashboard()
+    public function coursesList()
     {
-        return view('admin_dashboard');
+        $session = session();
+        if (!in_array($session->get('role'), ['admin', 'teacher'])) {
+            return redirect()->to('/login');
+        }
+        $courseModel = new CourseModel();
+        $courses = $courseModel->findAll();
+        return view('courses/courses', [
+            'courses' => $courses,
+        ]);
     }
 }

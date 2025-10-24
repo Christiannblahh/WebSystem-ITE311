@@ -2,8 +2,7 @@
 <html>
 
 <head>
-    <meta charset="utf-8">
-    <title><?= esc($title ?? 'MyApp') ?></title>
+    <title><?= esc($title ?? 'LMS') ?></title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -18,6 +17,45 @@
 
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-primary" href="<?= site_url('/dashboard') ?>">Dashboard</a>
+                </li>
+
+                <?php if (session()->get('role') === 'student'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/student/courses') ?>">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/dashboard') ?>">My Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/dashboard') ?>">My Grades</a>
+                    </li>
+                <?php endif; ?>
+
+                <?php if (session()->get('role') === 'teacher'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/admin/courses') ?>">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/dashboard') ?>">My Class</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/dashboard') ?>">Students</a>
+                    </li>
+                <?php endif; ?>
+
+                <?php if (session()->get('role') === 'admin'): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/admin/courses') ?>">Courses</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/dashboard') ?>">Manage Users</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="<?= site_url('/dashboard') ?>">Reports</a>
+                    </li>
+                <?php endif; ?>
 
                 <li class="nav-item">
                     <a class="nav-link <?= $uriPath === '' || $uriPath === 'dashboard' ? 'active' : '' ?>" href="<?= site_url('/dashboard') ?>">Dashboard</a>

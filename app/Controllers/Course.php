@@ -12,14 +12,14 @@ class Course extends Controller
         $session = session();
 
         // Check if user is logged in
-        if (!$session->has('user_id')) {
+        if (!$session->has('userID')) {
             return $this->response->setJSON([
                 'status' => 'error',
                 'message' => 'User not logged in.'
             ]);
         }
 
-        $user_id = $session->get('user_id');
+        $user_id = $session->get('userID');
         $course_id = $this->request->getPost('course_id');
 
         if (!$course_id) {
@@ -43,7 +43,7 @@ class Course extends Controller
         $data = [
             'user_id' => $user_id,
             'course_id' => $course_id,
-            'enrolled_at' => date('Y-m-d H:i:s')
+            'enrollment_date' => date('Y-m-d H:i:s')
         ];
 
         if ($enrollmentModel->enrollUser($data)) {
